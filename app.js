@@ -34,17 +34,18 @@ app.get('/api/v1/tours', (req, res) => {
 app.get('/api/v1/tours/:id', (req, res) => {
   // req.params give access to the assigned id value/ variable.
   console.log(req.params);
-
+  const id = req.params.id * 1; // '* 1' Converts string to number.
   // Find takes a callback function, which loops through array, returning true of false.
   // Find method creates a new array for each value in array that is 'true'.
-  const id = req.params.id * 1; // Converts string to number.
-  if (id > tours.length) {
+  const tour = tours.find((el) => el.id === id);
+
+  if (!tour) {
+    // !tour checks if tour is undefined
     return res.status(404).json({
       status: 'fail',
       message: 'Invalid ID',
     });
   }
-  const tour = tours.find((el) => el.id === id);
 
   res.status(200).json({
     status: 'success',
@@ -73,6 +74,34 @@ app.post('/api/v1/tours', (req, res) => {
       });
     }
   );
+});
+
+app.patch('/api/v1/tours/:id', (req, res) => {
+  if (req.params.id * 1 > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID',
+    });
+  }
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour: '<Updated tour here...>',
+    },
+  });
+});
+
+app.delete('/api/v1/tours/:id', (req, res) => {
+  if (req.params.id * 1 > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID',
+    });
+  }
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
 });
 
 const port = 3000;
