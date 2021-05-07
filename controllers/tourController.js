@@ -1,17 +1,5 @@
 const Tour = require('./../models/tourModel');
 
-exports.checkBody = (req, res, next) => {
-  // req.body
-  console.log(req.body);
-  if (!(req.body.name && req.body.price)) {
-    return res.status(400).json({
-      status: 'Bad Request',
-      message: 'Name and price properties required.',
-    });
-  }
-  next();
-};
-
 exports.getAllTours = (req, res) => {
   console.log(req.requestTime);
   res.status(200).json({
@@ -40,13 +28,29 @@ exports.getTour = (req, res) => {
   // });
 };
 
-exports.createTour = (req, res) => {
-  res.status(201).json({
-    status: 'success',
-    // data: {
-    //   tour: newTour,
-    // },
-  });
+// Async function to communicate with database.
+// Alternatively use .then()
+exports.createTour = async (req, res) => {
+  try {
+    // 1) Creates a tour based on the model, and then call save method on newTour.
+    // const newTour = new Tour({})
+    // newTour.save()
+
+    // 2) Calling create() method directly on Tour model.
+    const newTour = await Tour.create(req.body);
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        tour: newTour,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: 'Invalid data sent',
+    });
+  }
 };
 
 exports.updateTour = (req, res) => {
