@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Middleware that runs on a specific aparmeter.
 // Val is value of the parameter in question.
-router.param('id', tourController.checkID);
+// router.param('id', tourController.checkID);
 
 router
   .route('/')
